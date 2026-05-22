@@ -1,6 +1,7 @@
 import os
 import streamlit as st
-from langchain_huggingface import HuggingFaceEmbeddings
+# HAMEIN ENDPOINT EMBEDDINGS USE KARNA HAI (Bina torch wali)
+from langchain_huggingface import HuggingFaceEndpointEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_groq import ChatGroq
@@ -14,7 +15,13 @@ DB_FAISS_PATH = "vectorstore/db_faiss"
 
 @st.cache_resource
 def get_vectorstore():
-    embedding_model = HuggingFaceEmbeddings(model_name='sentence-transformers/all-MiniLM-L6-v2')
+    # Ye bina torch ke serverless tareeqe se embedding calculate karega
+    embedding_model = HuggingFaceEndpointEmbeddings(
+        model="sentence-transformers/all-MiniLM-L6-v2",
+        task="feature-extraction",
+        # Iske liye aapko koi alag token ki zaroorat nahi padegi agar standard chal raha hai, 
+        # fir bhi huggingface token safe side ke liye rakh sakte hain.
+    )
     db = FAISS.load_local(DB_FAISS_PATH, embedding_model, allow_dangerous_deserialization=True)
     return db
 
@@ -39,7 +46,8 @@ def main():
                 st.error("Failed to load the vector store")
                 return
 
-            GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
+            # Pehle st.secrets se check karega (Streamlit Cloud ke liye), fir local env se
+            GROQ_API_KEY = st.secrets.get("GROQ_API_KEY", os.environ.get("GROQ_API_KEY"))
             GROQ_MODEL_NAME = "llama-3.1-8b-instant"
             
             llm = ChatGroq(
