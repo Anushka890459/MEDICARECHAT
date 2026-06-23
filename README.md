@@ -1,52 +1,44 @@
-MEDICARECHAT - RAG-based Medical Chatbot 🏥
-MEDICARECHAT is an intelligent AI chatbot designed to provide accurate answers based on medical PDF data. It utilizes a Retrieval-Augmented Generation (RAG) architecture to ensure that responses are context-aware and grounded in the provided medical documents.
+# 🏥 MEDICARECHAT: RAG-Driven Medical Chatbot 🤖
 
-🚀 Features
-PDF Knowledge Integration: Automatically processes medical documents to build a local knowledge base.
+An intelligent, context-aware AI assistant engineered to extract semantic insights from medical literature and provide grounded, highly accurate responses. By leveraging a Retrieval-Augmented Generation (RAG) architecture, this system mitigates LLM hallucinations and ensures all answers are mathematically tethered to the underlying knowledge base.
 
-Fast Vector Search: Uses FAISS for high-speed similarity searches across medical data.
+🌍 **Live Production Link:** [https://medicarechat.onrender.com](https://medicarechat.onrender.com)
 
-Agentic Capabilities: Built with LangGraph to handle complex, multi-step medical queries.
+---
 
-Memory Retention: Maintains conversation history for a natural, chat-like experience.
+## 🚀 Key Features
 
-🛠️ Tech Stack
-Language: Python
+* **PDF Knowledge Integration:** Automates data ingestion by parsing raw medical PDFs and processing text into dense vector embeddings.
+* **Ultra-Fast Vector Storage:** Utilizes **FAISS (Facebook AI Similarity Search)** for high-dimensional, sub-millisecond semantic similarity searches.
+* **Advanced Orchestration:** Powered by **LangChain** utilizing the LangChain Expression Language (LCEL) and stateful configurations for optimized pipeline routing.
+* **Streamlit Chat Interface:** Built with a premium, stateful UI featuring message history tracking and performance-focused resource caching (`@st.cache_resource`).
+* **Production-Ready Containerization:** Standardized environment using a multi-stage **Dockerfile** for deterministic builds on cloud platforms.
 
-Orchestration: LangChain & LangGraph
+---
 
-Vector Database: FAISS
+## 🛠️ Technical Stack
 
-API Framework: FastAPI
+* **Language:** Python 3.10
+* **LLM Architecture:** ChatGroq (`llama-3.1-8b-instant`)
+* **Embeddings Model:** HuggingFace (`sentence-transformers/all-MiniLM-L6-v2`)
+* **Vector Store:** FAISS (CPU Optimized)
+* **Frontend Framework:** Streamlit (Stateful Chat Elements)
+* **Environment Management:** Python-Dotenv & UV / Pipenv
 
-Package Management: UV
+---
 
-📂 Project Structure
-medibot.py: The main script to run the chatbot interface.
+## 📂 Architecture & Project Structure
 
-create_memory_for_llm.py: A script to generate embeddings and initialize the vector store.
-
-connect_memory_with_llm.py: Handles the connection between the LLM and the FAISS database.
-
-data/: Directory for storing your medical source PDFs.
-
-vectorstore/db_faiss/: Stores the indexed vector data for retrieval.
-
-⚙️ How to Run
-Install Dependencies:
-
-Bash
-
-pip install -r requirements.txt
-Initialize Knowledge Base:
-
-Bash
-
-python create_memory_for_llm.py
-Launch the Chatbot:
-
-Bash
-
-python medibot.py
-📝 Disclaimer
-This project is for educational and portfolio purposes only. Always consult a certified healthcare professional for actual medical advice.
+```text
+MEDICARECHAT/
+├── data/                         # Directory for source medical PDFs
+│   └── The_GALE_ENCYCLOPEDIA.pdf
+├── vectorstore/
+│   └── db_faiss/                 # Persisted high-dimensional vector index
+│       ├── index.faiss
+│       └── index.pkl
+├── medibot.py                    # Main Streamlit Web Application
+├── create_memory_for_llm.py      # Knowledge Ingestion & Embedding Pipeline
+├── connect_memory_with_llm.py    # Local CLI Evaluation / Testing Script
+├── requirements.txt              # Production Python Dependencies
+└── Dockerfile                    # Production Container Deployment Config
